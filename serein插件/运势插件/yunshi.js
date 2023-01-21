@@ -1,26 +1,74 @@
 /// <reference path="SereinJSPluginHelper.js"/>
-let ys = {
-  name: "yunshi",
-  value: "v1.0",
-  author: "xianyubb",
-  discription: "运势插件",
-};
-serein.registerPlugin(ys.name, ys.value, ys.author, ys.discription);
 
-//随机数
+serein.registerPlugin('yunshi', 'v1.0', 'xianyubb and 饼干', '运势插件');
 
-//发送消息
-//检测输入运势发消息
-serein.setListener("onReceiveGroupMessage", onReceiveGroupMessage);
-function onReceiveGroupMessage(group, user, msg, showName) {
-  m = msg;
-  let a = Math.floor(Math.random() * 101);
-  let b = Math.floor(Math.random() * 101);
-  let c = Math.floor(Math.random() * 101);
-  if (m === "运势") {
-    let e = serein.sendGroup(
-      group,
-      `这是你今天的运势\n事业运:${a}\n桃花运:${b}\n财运:${c}`
-    );
-  }
+/**
+ * @typedef {Object} FortuneData
+ * @property {number} date
+ * @property {number} workFortune
+ * @property {number} loveFortune
+ * @property {number} moneyFortune
+ */
+/** @type {{[user: string]: FortuneData}} */
+const fortuneData = {};
+
+/**
+ * @param {number} max
+ * @returns {number}
+ */
+function getRandomNum(max = 100) {
+  return Math.round(Math.random() * max);
 }
+
+/**
+ * @returns {number}
+ */
+function getExtractedDate() {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
+}
+
+/**
+ * @returns {FortuneData}
+ */
+function roundFortune() {
+  return {
+    date: getExtractedDate(),
+    workFortune: getRandomNum(),
+    loveFortune: getRandomNum(),
+    moneyFortune: getRandomNum(),
+  };
+}
+
+function todayFortune(user) {
+  let fortune = fortuneData[user];
+  if (!fortune || fortune.date !== getExtractedDate()) {
+    fortune = roundFortune();
+    fortuneData[user] = fortune;
+  }
+
+  const { workFortune, loveFortune, moneyFortune } = fortune;
+  return (
+    `[CQ:at,qq=${user}]\n`+
+    `以下是您今日的运势\n` +
+    `事业运:${workFortune}\n` +
+    `桃花运:${loveFortune}\n` +
+    `财运:${moneyFortune}\n`+
+    `每日运势不能更改哦~`
+  );
+}
+
+serein.setListener(
+  'onReceiveGroupMessage',
+  /**
+   * @param {number} group
+   * @param {number} user
+   * @param {string} msg
+   */
+  (group, user, msg) => {
+    if (msg.trim() === '运势') {
+      serein.sendGroup(group, todayFortune(user));
+    }
+  }
+);
