@@ -22,7 +22,7 @@ mc.listen("onJoin", (pl) => {
   pl.sendToast("§6§l入服欢迎", "§4§l欢迎玩家§e[" + pl.name + "]§4进入服务器");
 });
 
-// 入服欢迎title命令形式(暂时废弃)
+// 入服欢迎title命令形式
 mc.listen("onJoin", (pl) => {
   mc.runcmd(`title @a title §4欢迎玩家\n§e${pl.name}§3\n进入服务器`);
 });
