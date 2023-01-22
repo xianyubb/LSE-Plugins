@@ -1,5 +1,6 @@
 //LiteLoaderScript Dev Helper
-/// <reference path="c:\Users\Administrator\.vscode/dts/llaids/src/index.d.ts"/>
+/// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/> 
+
 
 ll.registerPlugin(
   /* name */ "onJoin",
@@ -22,8 +23,6 @@ mc.listen("onJoin", (pl) => {
 });
 
 // 入服欢迎title命令形式(暂时废弃)
-/*
 mc.listen("onJoin", (pl) => {
-  mc.runcmd("title @a title §4§l欢迎玩家进入服务器");
+  mc.runcmd(`title @a title §4欢迎玩家\n§e${pl.name}§3\n进入服务器`);
 });
-*/
