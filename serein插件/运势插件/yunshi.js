@@ -1,6 +1,6 @@
 /// <reference path="SereinJSPluginHelper.js"/>
 
-serein.registerPlugin('yunshi', 'v1.0', 'xianyubb and 饼干', '运势插件');
+serein.registerPlugin('yunshi', 'v1.0', 'xianyubb and lgc2333', '运势插件');
 
 /**
  * @typedef {Object} FortuneData
