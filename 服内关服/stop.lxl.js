@@ -22,7 +22,7 @@ mc.listen("onServerStarted", () => {
 
 mc.listen("onPlayerCmd", (pl, [stop]) => {
   let open = pl.isOP();
-  if ((open = true)) {
+  if ((open === true)) {
      mc.broadcast("即将在三秒后关闭服务器");
     setTimeout(() => {
       mc.runcmd("stop");
