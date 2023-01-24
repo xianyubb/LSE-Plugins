@@ -1,11 +1,10 @@
 //LiteLoaderScript Dev Helper
-/// <reference path="c:\Users\Administrator\.vscode/dts/llaids/src/index.d.ts"/>
-//写插件时的补全不用关 删了也可以 不影响使用
+/// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
 
 //注册插件
 ll.registerPlugin(
   /* name */ "muma",
-  /* introduction */ "一个简用的插件",
+  /* introduction */ "一个简用跑路的插件",
   /* version */ [0, 0, 1],
   /* otherInformation */ {}
 );
