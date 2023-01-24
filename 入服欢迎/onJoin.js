@@ -1,6 +1,5 @@
 //LiteLoaderScript Dev Helper
-/// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/> 
-
+/// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
 
 ll.registerPlugin(
   /* name */ "onJoin",
