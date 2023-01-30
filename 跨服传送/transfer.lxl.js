@@ -48,13 +48,44 @@ mc.listen("onPlayerCmd", (pl, cmd) => {
       [conf.get("image(1)"), conf.get("image(2)"), conf.get("image(3)")],
       (pl, Number) => {
         if (Number === 0) {
-          pl.transServer(conf.get("ServerIP(1)"), conf.get("ServerPort(1)"));
+          if (conf.get("ServerName(1)") !== "") {
+            pl.tell("[Transfer]3秒后将传送至目标服务器");
+            setTimeout(() => {
+              pl.transServer(
+                conf.get("ServerIP(1)"),
+                conf.get("ServerPort(1)")
+              );
+            }, 3000);
+          } else {
+            pl.tell("[Transfer]未能传送到目标服务器");
+          }
         }
         if (Number === 1) {
-          pl.transServer(conf.get("ServerIP(2)"), conf.get("ServerPort(2)"));
+          if (conf.get("ServerName(2)") !== "") {
+            pl.tell("[Transfer]3秒后将传送至目标服务器");
+            setTimeout(() => {
+              pl.transServer(
+                conf.get("ServerIP(2)"),
+                conf.get("ServerPort(2)")
+              );
+            }, 3000);
+          } else {
+            pl.tell("[Transfer]未能传送到目标服务器");
+          }
         }
+
         if (Number === 2) {
-          pl.transServer(conf.get("ServerIP(3)"), conf.get("ServerPort(3)"));
+          if (conf.get("ServerName(3)") !== "") {
+            pl.tell("[Transfer]3秒后将传送至目标服务器");
+            setTimeout(() => {
+              pl.transServer(
+                conf.get("ServerIP(3)"),
+                conf.get("ServerPort(3)")
+              );
+            }, 3000);
+          } else {
+            pl.tell("[Transfer]未能传送到目标服务器");
+          }
         }
       }
     );
