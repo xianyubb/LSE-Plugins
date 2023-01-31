@@ -21,6 +21,7 @@ mc.listen("onServerStarted", () => {
   cmds.setup();
 });
 
+//配置文件
 let conf = new JsonConfigFile("./plugins/xianyubb/transfer/config.json");
 conf.init("ServerName(1)", "服务器名称");
 conf.init("image(1)", "");
@@ -35,59 +36,105 @@ conf.init("image(3)", "");
 conf.init("ServerIP(3)", "127.0.0.1");
 conf.init("ServerPort(3)", 19132);
 
+//发送表单
 mc.listen("onPlayerCmd", (pl, cmd) => {
   if (cmd === "transfer") {
-    pl.sendSimpleForm(
-      "跨服传送菜单",
-      "选择要进行传送的服务器",
-      [
-        conf.get("ServerName(1)"),
-        conf.get("ServerName(2)"),
-        conf.get("ServerName(3)"),
-      ],
-      [conf.get("image(1)"), conf.get("image(2)"), conf.get("image(3)")],
-      (pl, Number) => {
-        if (Number === 0) {
-          if (conf.get("ServerName(1)") !== "") {
-            pl.tell("[Transfer]3秒后将传送至目标服务器");
+    if (conf.get("ServerName(1)") !== "") {
+      pl.sendSimpleForm(
+        "跨服传送表单",
+        "请选择要传送的服务器",
+        [conf.get("ServerName(1)")],
+        [conf.get("image(1)")],
+        (pl, Number) => {
+          if (Number === 0) {
+            pl.tell("[Transfer]即将在3秒后传送至目标服务器");
             setTimeout(() => {
               pl.transServer(
                 conf.get("ServerIP(1)"),
                 conf.get("ServerPort(1)")
               );
             }, 3000);
-          } else {
-            pl.tell("[Transfer]未能传送到目标服务器");
           }
         }
-        if (Number === 1) {
-          if (conf.get("ServerName(2)") !== "") {
-            pl.tell("[Transfer]3秒后将传送至目标服务器");
-            setTimeout(() => {
-              pl.transServer(
-                conf.get("ServerIP(2)"),
-                conf.get("ServerPort(2)")
-              );
-            }, 3000);
-          } else {
-            pl.tell("[Transfer]未能传送到目标服务器");
+      );
+    }
+    if (one === Null) {
+      pl.tell("[Transfer]配置文件错误或者未配置");
+    }
+    if (conf.get("ServerName(1)") !== "") {
+      if (conf.get("ServerName(2)") !== "") {
+        pl.sendSimpleForm(
+          "跨服传送表单",
+          "请选择要传送的服务器",
+          [conf.get("ServerName(1)"), conf.get("ServerName(2)")],
+          [conf.get("image(1)"), conf.get("image(2)")],
+          (pl, Number) => {
+            if (Number === 0) {
+              pl.tell("[Transfer]即将在3秒后传送至目标服务器");
+              setTimeout(() => {
+                pl.transServer(
+                  conf.get("ServerIP(1)"),
+                  conf.get("ServerPort(1)")
+                );
+              }, 3000);
+            }
+            if (Number === 1) {
+              pl.tell("[Transfer]即将在3秒后传送至目标服务器");
+              setTimeout(() => {
+                pl.transServer(
+                  conf.get("ServerIP(2)"),
+                  conf.get("ServerPort(2)")
+                );
+              }, 3000);
+            }
           }
-        }
-
-        if (Number === 2) {
-          if (conf.get("ServerName(3)") !== "") {
-            pl.tell("[Transfer]3秒后将传送至目标服务器");
-            setTimeout(() => {
-              pl.transServer(
-                conf.get("ServerIP(3)"),
-                conf.get("ServerPort(3)")
-              );
-            }, 3000);
-          } else {
-            pl.tell("[Transfer]未能传送到目标服务器");
-          }
+        );
+      }
+    }
+    if (conf.get("ServerName(1)") !== "") {
+      if (conf.get("ServerName(2)") !== "") {
+        if (conf.get("ServerName(3)") !== "") {
+          pl.sendSimpleForm(
+            "跨服传送表单",
+            "请选择要传送的服务器",
+            [
+              conf.get("ServerName(1)"),
+              conf.get("ServerName(2)"),
+              conf.get("ServerName(3)"),
+            ],
+            [conf.get("image(1)"), conf.get("image(2)"), conf.get("image(3)")],
+            (pl, Number) => {
+              if (Number === 0) {
+                pl.tell("[Transfer]即将在3秒后传送至目标服务器");
+                setTimeout(() => {
+                  pl.transServer(
+                    conf.get("ServerIP(1)"),
+                    conf.get("ServerPort(1)")
+                  );
+                }, 3000);
+              }
+              if (Number === 1) {
+                pl.tell("[Transfer]即将在3秒后传送至目标服务器");
+                setTimeout(() => {
+                  pl.transServer(
+                    conf.get("ServerIP(2)"),
+                    conf.get("ServerPort(2)")
+                  );
+                }, 3000);
+              }
+              if (Number === 2) {
+                pl.tell("[Transfer]即将在3秒后传送至目标服务器");
+                setTimeout(() => {
+                  pl.transServer(
+                    conf.get("ServerIP(3)"),
+                    conf.get("ServerPort(3)")
+                  );
+                }, 3000);
+              }
+            }
+          );
         }
       }
-    );
+    }
   }
 });
