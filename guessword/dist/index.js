@@ -1,2 +1,3 @@
 "use strict";
-require('./src/index');
+Object.defineProperty(exports, "__esModule", { value: true });
+require("./src/index");
