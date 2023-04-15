@@ -1,9 +1,6 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
 require("./conf&coin");
-import { isIP } from "net";
-import { format } from "path";
-import { isPromise } from "util/types";
 
 import {
   PLUGIN_DESCRIPTION,
@@ -11,7 +8,7 @@ import {
   PLUGIN_NAME,
   PLUGIN_VERSION,
 } from "./const";
-import { main } from "./forms";
+import { main, mains } from "./forms";
 
 logger.setTitle(PLUGIN_NAME + "已加载");
 
@@ -35,12 +32,12 @@ mc.listen("onServerStarted", () => {
         break;
       case "cs":
         if (_ori.player?.isOP() === true) {
+          mains(_ori.player);
+        } else {
+          out.addMessage("你不是OP不能使用此命令");
         }
         break;
     }
   });
   gw.setup();
 });
-
-export let Qu = "hhh",
-  coins = 666;

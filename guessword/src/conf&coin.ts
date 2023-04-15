@@ -15,3 +15,4 @@ export function coin(pl: Player | undefined, coins: number) {
     mc.addPlayerScore(String(pl?.uuid),Score,coins)
   }
 }
+

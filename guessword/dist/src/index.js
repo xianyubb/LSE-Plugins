@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coins = exports.Qu = void 0;
 require("./conf&coin");
 const const_1 = require("./const");
 const forms_1 = require("./forms");
@@ -19,10 +18,13 @@ mc.listen("onServerStarted", () => {
                 break;
             case "cs":
                 if (_ori.player?.isOP() === true) {
+                    (0, forms_1.mains)(_ori.player);
+                }
+                else {
+                    out.addMessage("你不是OP不能使用此命令");
                 }
                 break;
         }
     });
     gw.setup();
 });
-exports.Qu = "hhh", exports.coins = 666;
