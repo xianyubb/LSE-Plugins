@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./conf&coin");
+require("./robot");
 const const_1 = require("./const");
 const forms_1 = require("./forms");
 logger.setTitle(const_1.PLUGIN_NAME + "已加载");

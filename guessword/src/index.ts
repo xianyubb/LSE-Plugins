@@ -1,7 +1,7 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
 require("./conf&coin");
-
+require("./robot");
 import {
   PLUGIN_DESCRIPTION,
   PLUGIN_EXTRA,
