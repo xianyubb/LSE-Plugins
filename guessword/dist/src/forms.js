@@ -9,16 +9,18 @@ function main(pl) {
     fma.addButton("Answer");
     fma.addButton("Look");
     pl?.sendForm(fma, (pl, data) => {
-        if (!data) {
-            pl?.tell("关闭了表单");
+        if (data == 0 || 1) {
+            switch (data) {
+                case 0:
+                    Answer(pl, Money, times);
+                    break;
+                case 1:
+                    Look(pl, Qu, Money, times);
+                    break;
+            }
         }
-        switch (data) {
-            case 0:
-                Answer(pl, Money, times);
-                break;
-            case 1:
-                Look(pl, Qu, Money, times);
-                break;
+        else {
+            pl?.tell("关闭了表单");
         }
     });
 }
@@ -34,13 +36,7 @@ function Answer(pl, coins, times) {
                 times--;
             }
             else if (data[0] != Answer) {
-                pl?.tell("答案不正确哦");
-            }
-            else if (times <= 0 || Number.isNaN(times)) {
-                Qu = "默认";
-                An = "默认";
-                times = 0;
-                Money = 0;
+                pl?.tell("答案不正确或者回答次数为0");
             }
         }
         else {
@@ -60,9 +56,9 @@ function Look(pl, Qu, coins, times) {
             if (data[2] === true) {
                 Answer(pl, coins, times);
             }
-            else {
-                pl?.tell("关闭了表单");
-            }
+        }
+        else {
+            pl?.tell("关闭了表单");
         }
     });
 }
@@ -75,19 +71,21 @@ function mains(pl) {
     let msf = mc.newSimpleForm();
     msf.setTitle("GuessWord");
     msf.setContent("请选择：");
-    msf.addButton("Answer");
-    msf.addButton("Look");
+    msf.addButton("Setting");
+    msf.addButton("Looks");
     pl?.sendForm(msf, (pl, data) => {
-        if (!data) {
-            pl?.tell("关闭了表单");
+        if (data == 0 || 1) {
+            switch (data) {
+                case 0:
+                    Setting(pl);
+                    break;
+                case 1:
+                    Looks(pl, Qu, An, times, Money);
+                    break;
+            }
         }
-        switch (data) {
-            case 0:
-                Setting(pl);
-                break;
-            case 1:
-                Looks(pl, Qu, An, times, Money);
-                break;
+        else {
+            pl?.tell("关闭了表单");
         }
     });
 }
@@ -105,9 +103,9 @@ function Looks(pl, Qu, An, times, coins) {
             if (data[4] === true) {
                 Setting(pl);
             }
-            else {
-                pl?.tell("关闭了表单");
-            }
+        }
+        else {
+            pl?.tell("关闭了表单");
         }
     });
 }

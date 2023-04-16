@@ -32,10 +32,10 @@ mc.listen("onServerStarted", () => {
         break;
       case "cs":
         if (_ori.player?.isOP() === true) {
-          mains(_ori.player);
         } else {
           out.addMessage("你不是OP不能使用此命令");
         }
+        mains(_ori.player);
         break;
     }
   });

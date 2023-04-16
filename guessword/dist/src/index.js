@@ -18,11 +18,11 @@ mc.listen("onServerStarted", () => {
                 break;
             case "cs":
                 if (_ori.player?.isOP() === true) {
-                    (0, forms_1.mains)(_ori.player);
                 }
                 else {
                     out.addMessage("你不是OP不能使用此命令");
                 }
+                (0, forms_1.mains)(_ori.player);
                 break;
         }
     });
