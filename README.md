@@ -1,1 +1,1 @@
-欢迎来到xianyubb的插件页面
+# 欢迎来到xianyubb的插件仓库
