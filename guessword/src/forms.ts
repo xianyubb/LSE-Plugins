@@ -1,8 +1,9 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
 
+import { stringify } from "querystring";
 import { coin } from "./conf&coin";
-export function main(pl: Player | undefined) {
+export function main(pl: Player | undefined, Money: number, times: number) {
   let fma = mc.newSimpleForm();
   fma.setTitle("GuessWord");
   fma.setContent("请选择：");
@@ -23,17 +24,22 @@ export function main(pl: Player | undefined) {
     }
   });
 }
+
+
 //玩家菜单
-export function Answer(pl: Player | undefined, coins: number, times: number) {
+export function Answer(pl: Player | undefined, coins: number, time: number) {
   let Af = mc.newCustomForm();
   Af.setTitle("GuessWord");
   Af.addInput("请输入答案", "(String)");
   pl?.sendForm(Af, (pl: Player | undefined, data) => {
     if (data) {
-      if (data[0] === Answer && times > 0) {
+      if (data[0] == An && times > 0) {
         coin(pl, coins);
-        times--;
-      } else if (data[0] != Answer) {
+        times = time--;
+        log(data, times);
+      
+        pl?.tell("回答正确");
+      } else if (data[0] != An) {
         pl?.tell("答案不正确或者回答次数为0");
       }
     } else {
@@ -63,10 +69,10 @@ export function Look(
   });
 }
 
-let Qu = "默认";
-let An = "默认";
-let times = 1;
-let Money = 0;
+export let Qu = "默认",
+  An = "默认",
+  times = 1,
+  Money = 0;
 
 export function mains(pl: Player | undefined) {
   let msf = mc.newSimpleForm();

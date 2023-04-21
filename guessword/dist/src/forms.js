@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Setting = exports.Looks = exports.mains = exports.Look = exports.Answer = exports.main = void 0;
+exports.Setting = exports.Looks = exports.mains = exports.Money = exports.times = exports.An = exports.Qu = exports.Look = exports.Answer = exports.main = void 0;
 const conf_coin_1 = require("./conf&coin");
-function main(pl) {
+function main(pl, Money, times) {
     let fma = mc.newSimpleForm();
     fma.setTitle("GuessWord");
     fma.setContent("请选择：");
@@ -15,7 +15,7 @@ function main(pl) {
                     Answer(pl, Money, times);
                     break;
                 case 1:
-                    Look(pl, Qu, Money, times);
+                    Look(pl, exports.Qu, Money, times);
                     break;
             }
         }
@@ -25,17 +25,19 @@ function main(pl) {
     });
 }
 exports.main = main;
-function Answer(pl, coins, times) {
+function Answer(pl, coins, time) {
     let Af = mc.newCustomForm();
     Af.setTitle("GuessWord");
     Af.addInput("请输入答案", "(String)");
     pl?.sendForm(Af, (pl, data) => {
         if (data) {
-            if (data[0] === Answer && times > 0) {
+            if (data[0] == exports.An && exports.times > 0) {
                 (0, conf_coin_1.coin)(pl, coins);
-                times--;
+                exports.times = time--;
+                log(data, exports.times);
+                pl?.tell("回答正确");
             }
-            else if (data[0] != Answer) {
+            else if (data[0] != exports.An) {
                 pl?.tell("答案不正确或者回答次数为0");
             }
         }
@@ -63,10 +65,7 @@ function Look(pl, Qu, coins, times) {
     });
 }
 exports.Look = Look;
-let Qu = "默认";
-let An = "默认";
-let times = 1;
-let Money = 0;
+exports.Qu = "默认", exports.An = "默认", exports.times = 1, exports.Money = 0;
 function mains(pl) {
     let msf = mc.newSimpleForm();
     msf.setTitle("GuessWord");
@@ -80,7 +79,7 @@ function mains(pl) {
                     Setting(pl);
                     break;
                 case 1:
-                    Looks(pl, Qu, An, times, Money);
+                    Looks(pl, exports.Qu, exports.An, exports.times, exports.Money);
                     break;
             }
         }
@@ -120,10 +119,10 @@ function Setting(pl) {
     Sf.addInput("奖励金额:", "请输入整数");
     pl?.sendForm(Sf, (pl, data) => {
         if (data) {
-            Qu = data[1];
-            An = data[2];
-            times = parseInt(data[3]);
-            Money = parseInt(data[4]);
+            exports.Qu = data[1];
+            exports.An = data[2];
+            exports.times = parseInt(data[3]);
+            exports.Money = parseInt(data[4]);
             mc.broadcast("[GuessWord]管理员发布了问题:\n" + data[1]);
         }
         else {

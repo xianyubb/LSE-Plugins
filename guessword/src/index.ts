@@ -8,7 +8,7 @@ import {
   PLUGIN_NAME,
   PLUGIN_VERSION,
 } from "./const";
-import { main, mains } from "./forms";
+import { main, mains, Money, times } from "./forms";
 
 logger.setTitle(PLUGIN_NAME + "已加载");
 
@@ -28,14 +28,15 @@ mc.listen("onServerStarted", () => {
   gw.setCallback((_cmd, _ori, out, res) => {
     switch (res.main) {
       case "main":
-        main(_ori.player);
+        main(_ori.player, Money, times);
         break;
       case "cs":
         if (_ori.player?.isOP() === true) {
         } else {
+          mains(_ori.player);
           out.addMessage("你不是OP不能使用此命令");
         }
-        mains(_ori.player);
+
         break;
     }
   });

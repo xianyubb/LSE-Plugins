@@ -15,15 +15,15 @@ mc.listen("onServerStarted", () => {
     gw.setCallback((_cmd, _ori, out, res) => {
         switch (res.main) {
             case "main":
-                (0, forms_1.main)(_ori.player);
+                (0, forms_1.main)(_ori.player, forms_1.Money, forms_1.times);
                 break;
             case "cs":
                 if (_ori.player?.isOP() === true) {
                 }
                 else {
+                    (0, forms_1.mains)(_ori.player);
                     out.addMessage("你不是OP不能使用此命令");
                 }
-                (0, forms_1.mains)(_ori.player);
                 break;
         }
     });

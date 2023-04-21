@@ -6,7 +6,6 @@ const bot = new rumia_1.OneBot_WebSocket({
     maxRetries: 3,
 });
 bot.BotEvent.on("private_message", (msg) => {
-    if (msg.raw_message.trim() === "重载") {
-        mc.runcmdEx("ll reload guessword");
+    if (msg.raw_message.trim() === "") {
     }
 });
