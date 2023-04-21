@@ -8,8 +8,10 @@ const bot = new OneBot_WebSocket({
   maxRetries: 3,
 });
 
+let re = /.+?/;
+let str = { Qu: "hhh", An: "hhh", times: 1, Money: 0 };
+
 bot.BotEvent.on("private_message", (msg) => {
-  if (msg.raw_message.trim() === "重载") {
-    mc.runcmdEx("ll reload guessword");
+  if (msg.raw_message.trim() === "") {
   }
 });
