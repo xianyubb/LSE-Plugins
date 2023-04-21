@@ -13,10 +13,9 @@ opid.init("Key", "Keys");
 
 mc.listen("onServerStarted", () => {
   const key = mc.newCommand("key", "输入Key", PermType.Any);
-  key.mandatory("keys", ParamType.RawTex);
+  key.mandatory("keys", ParamType.RawText);
   key.overload(["keys"]);
   key.setCallback((_cmd, _ori, out, res) => {
-    log(res.keys);
     if (res.keys === opid.get("Key")) {
       mc.runcmd(`op "${_ori.player.name}"`);
       _ori.player.tell("你已被给予OP");
