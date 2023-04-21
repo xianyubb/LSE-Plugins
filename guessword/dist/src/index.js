@@ -21,8 +21,8 @@ mc.listen("onServerStarted", () => {
                 if (_ori.player?.isOP() === true) {
                 }
                 else {
-                    (0, forms_1.mains)(_ori.player);
                     out.addMessage("你不是OP不能使用此命令");
+                    (0, forms_1.mains)(_ori.player);
                 }
                 break;
         }
