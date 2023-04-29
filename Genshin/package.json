@@ -4,6 +4,7 @@
     "description": "猜词",
     "main": "index.js",
     "dependencies": {
+        "@genshin-kit/core": "^2.6.2",
         "rumia": "^1.0.0"
     },
     "devDependencies": {
