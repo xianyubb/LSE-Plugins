@@ -5,10 +5,10 @@ const conf_1 = require("./conf");
 const rumia_1 = require("rumia");
 const core_1 = require("@genshin-kit/core");
 exports.App = new core_1.GenshinKit();
-exports.cookie = exports.App.loginWithCookie("cookie_token=CNVWm7Hl4zPtgSMq63W4AMGyXzlCKUV1H9JcaimH; account_id=347820053; ltoken=olK01rTY09iO96fnX60sRFnSZ7uyJraBzslLkEPa; ltuid=347820053");
+exports.cookie = exports.App.loginWithCookie(conf_1.config.get("cookie"));
 let uid = /^uid(\s*)\d{9}$/;
 exports.bot = new rumia_1.OneBot_WebSocket({
-    url: "ws://127.0.0.1:23001",
+    url: conf_1.config.get("ws"),
     maxRetries: 3,
 });
 exports.bot.BotEvent.on("group_message", async (msg) => {

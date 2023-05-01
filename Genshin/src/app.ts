@@ -6,14 +6,12 @@ import { OneBot_WebSocket } from "rumia";
 import { GenshinKit, util } from "@genshin-kit/core";
 
 export const App = new GenshinKit();
-export let cookie = App.loginWithCookie(
-  "cookie_token=CNVWm7Hl4zPtgSMq63W4AMGyXzlCKUV1H9JcaimH; account_id=347820053; ltoken=olK01rTY09iO96fnX60sRFnSZ7uyJraBzslLkEPa; ltuid=347820053"
-);
+export let cookie = App.loginWithCookie(config.get("cookie"));
 
 let uid = /^uid(\s*)\d{9}$/;
 
 export const bot = new OneBot_WebSocket({
-  url: "ws://127.0.0.1:23001",
+  url: config.get("ws"),
   maxRetries: 3,
 });
 

@@ -1,7 +1,7 @@
 {
-    "name": "guessword",
+    "name": "qq-bot-llse",
     "version": "1.0.0",
-    "description": "猜词",
+    "description": "QQ机器人插件",
     "main": "index.js",
     "dependencies": {
         "@genshin-kit/core": "^2.6.2",
