@@ -139,9 +139,7 @@ function fm(pl) {
 mc.listen("onServerStarted", () => {
   const cmd = mc.newCommand("transfer", "跨服传送", PermType.Any, 0x80);
   cmd.setAlias("tr");
-  cmd.optional("IP", ParamType.RawText);
-  cmd.optional("PORT", ParamType.Int);
-  cmd.overload(["IP", "PORT"]);
+  cmd.overload([]);
   cmd.setCallback((_cmd, _ori, out, res) => {
     fm(_ori.player);
   });
