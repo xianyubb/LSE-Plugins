@@ -5,6 +5,7 @@
     "main": "index.js",
     "dependencies": {
         "@genshin-kit/core": "^2.6.2",
+        "go-cqhttp": "^4.0.1",
         "rumia": "^1.0.0"
     },
     "devDependencies": {

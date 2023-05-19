@@ -14,6 +14,10 @@ export const bot = new OneBot_WebSocket({
   url: config.get("ws"),
   maxRetries: 3,
 });
+let ConnectStates = bot.get_login_info().then((a) => {
+  log(a);
+});
+log(ConnectStates);
 
 bot.BotEvent.on("group_message", async (msg) => {
   if (msg.message === "ys") {
