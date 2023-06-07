@@ -10,6 +10,5 @@ conf.init("connection", {
   password: "a12345678",
 });
 
-
-
+conf.init("ScoreName","money")
 
