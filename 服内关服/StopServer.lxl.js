@@ -9,21 +9,13 @@ ll.registerPlugin(
 );
 
 //插件加载成功提示
-log("StopServer加载成功")
-
+log("StopServer加载成功");
 
 //注册命令stops
 mc.listen("onServerStarted", () => {
   const cmd = mc.newCommand("stops", "打开表单", PermType.Any, 0x80);
-  cmd.optional("action", ParamType.Bool);
-  cmd.overload(["action"]);
-  cmd.setCallback((_cmd, _ori, our, res) => {});
-  cmd.setup();
-});
-
-//监听玩家使用stops指令并打开表单
-mc.listen("onPlayerCmd", (pl, cmd) => {
-  if (cmd === "stops") {
+  cmd.overload([]);
+  cmd.setCallback((_cmd, _ori, our, res) => {
     pl.sendModalForm(
       "线上关服[提示]",
       "§4真的要关闭服务器吗？",
@@ -41,6 +33,6 @@ mc.listen("onPlayerCmd", (pl, cmd) => {
         }
       }
     );
-  }
+  });
+  cmd.setup();
 });
-          
