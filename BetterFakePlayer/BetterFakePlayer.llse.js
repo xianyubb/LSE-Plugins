@@ -11,7 +11,6 @@ ll.registerPlugin(
     qq: "2149656630",
   }
 );
-mc.spawnSimulatedPlayer("hhh", 0, 0, 0, 0);
 
 /** 注册fakeplayer命令 */
 const fakeplayer = mc.newCommand("fakeplayer", "假人", PermType.Any, 0x80);
@@ -20,64 +19,82 @@ fakeplayer.setAlias("fp");
 //main
 fakeplayer.mandatory("name", ParamType.String);
 fakeplayer.mandatory("pos", ParamType.BlockPos);
+fakeplayer.optional("times", ParamType.Int);
+fakeplayer.mandatory("target", ParamType.Actor);
 //注册生成假人命令
 fakeplayer.setEnum("ispawn", ["spawn", "dispawn"]);
-fakeplayer.mandatory("ispawn", ParamType.Enum, "ispawn", 1);
-fakeplayer.overload(["name", "ispawn"]);
+fakeplayer.mandatory("isspawn", ParamType.Enum, "ispawn", 1);
+fakeplayer.overload(["name", "isspawn"]);
 //注册假人跳跃命令
 fakeplayer.setEnum("jump", ["jump"]);
-fakeplayer.mandatory("jump", ParamType.Enum, "jump", 1);
-fakeplayer.overload(["name", "jump"]);
+fakeplayer.mandatory("jumps", ParamType.Enum, "jump", 1);
+fakeplayer.overload(["name", "jumps", "times"]);
 //注册假人攻击命令
 fakeplayer.setEnum("attack", ["attack"]);
 fakeplayer.setEnum("repeat", ["repeat"]);
-fakeplayer.mandatory("attack", ParamType.Enum, "attack", 1);
-fakeplayer.optional("repeat", ParamType.Enum, "repeat", 1);
+fakeplayer.mandatory("attacks", ParamType.Enum, "attack", 1);
+fakeplayer.optional("repeats", ParamType.Enum, "repeat", 1);
 fakeplayer.optional("interval", ParamType.Int);
-fakeplayer.optional("times", ParamType.Int);
-fakeplayer.overload(["name", "attack", "repeat", "interval", "times"]);
+fakeplayer.overload([
+  "name",
+  "attacks",
+  "target",
+  "repeats",
+  "interval",
+  "times",
+]);
 //注册假人看向某个位置命令
 fakeplayer.setEnum("lookat", ["lookat"]);
-fakeplayer.mandatory("lookat", ParamType.Enum, "lookat", 1);
-fakeplayer.overload(["name", "lookat", "pos"]);
+fakeplayer.mandatory("lookats", ParamType.Enum, "lookat", 1);
+fakeplayer.overload(["name", "lookats", "pos"]);
 //注册假人破坏方块命令
 fakeplayer.setEnum("destory", ["destory"]);
-fakeplayer.mandatory("destory", ParamType.Enum, "destory", 1);
-fakeplayer.overload(["name", "destory", "pos"]);
+fakeplayer.mandatory("destorys", ParamType.Enum, "destory", 1);
+fakeplayer.overload(["name", "destorys", "pos"]);
 //注册假人停止破坏方块指令
 fakeplayer.setEnum("stopdestory", ["stopdestory"]);
-fakeplayer.mandatory("stopdestory", ParamType.Enum, "stopdestory", 1);
-fakeplayer.overload(["name", "stopdestory"]);
+fakeplayer.mandatory("stopdestorys", ParamType.Enum, "stopdestory", 1);
+fakeplayer.overload(["name", "stopdestorys"]);
 //注册设置假人身体角度命令
 fakeplayer.setEnum("rot", ["rot"]);
-fakeplayer.mandatory("rot", ParamType.Enum, "rot", 1);
-fakeplayer.mandatory("rot-int", ParamType.Int);
-fakeplayer.overload(["name", "rot", "rot-int"]);
+fakeplayer.mandatory("rots", ParamType.Enum, "rot", 1);
+fakeplayer.mandatory("rotint", ParamType.Int);
+fakeplayer.overload(["name", "rots", "rotint"]);
 //命令回调
 fakeplayer.setCallback((_cmd, _ori, out, res) => {
-  for (let key in res) {
-    if (res[key] == null) {
-      delete res[key];
-    }
-  }
-  if (_ori.player && _ori.player.isOP() === true) {
-    if (isfakeplayer(res.name)) {
-      
+  if (_ori.player && _ori.player.isOP()) {
+    if (cmd(res)) {
+      _ori.player.tell("假人正在执行中...");
     } else {
-      let Player = _ori.player;
-      let FakePlayer = spawnSimilatedPlayer(Player, res.name, Player.blockPos);
-      FakePlayer.addTag(Player.name);
+      _ori.player.tell(`未找到名为${res["name"]}的假人`);
+      _ori.player.tell(`正在为您生成名为${res["name"]}的假人`);
+      let sp = spawnSimilatedPlayer(
+        _ori.player,
+        res["name"],
+        _ori.player.blockPos
+      );
+      sp.addTag(_o.player.xuid);
     }
-    //执行命令的对象是op玩家时
+    //当命令执行者是OP玩家时
   } else if (_ori.player) {
-    //执行命令的对象是非op玩家时
-    log("只有op才能执行此命令");
-  } else {
-    if (isfakeplayer(res.name)) {
+    if (cmd(res)) {
+      _ori.player.tell("假人正在执行中...");
     } else {
-      mc.spawnSimulatedPlayer(res.name, 0, 0, 0, 0);
+      _ori.player.tell(`未找到名为${res["name"]}的假人`);
     }
-    //执行命令的对象非玩家时
+    //当命令执行者是普通玩家是
+  } else {
+    if (cmd(res)) {
+      log("假人正在执行中...");
+    } else {
+      log(`未找到名为${res["name"]}的假人`);
+      log(`正在为您生成名为${res["name"]}的假人`);
+      let sp = mc.spawnSimulatedPlayer(res["name"], 0, 0, 0, 0);
+      log(`已在主世界0，0，0坐标生成创造假人`);
+      sp.setGameMode(1);
+      sp.addTag("console");
+    }
+    //当命令执行者非玩家时
   }
 });
 //安装命令
@@ -91,6 +108,7 @@ fakeplayer.setup();
  */
 let spawnSimilatedPlayer = (Player, name, pos) => {
   Player.tell(`[BetterFakePlayer]成功为玩家${Player.name}生成了一个假人`);
+
   return mc.spawnSimulatedPlayer(name, pos);
 };
 
@@ -99,10 +117,13 @@ let spawnSimilatedPlayer = (Player, name, pos) => {
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
  * @param {Entity} target 攻击对象
  * @param {number} Times 攻击次数
+ * @param {number} interval 攻击间隔
  */
-let Attack = (SimulatedPlayer, target, Times) => {
+let Attack = (SimulatedPlayer, target, Times = 1, interval = 200) => {
   for (let i = 0; i < Times; i++) {
-    return SimulatedPlayer.simulateAttack(target);
+    setInterval(async () => {
+      return SimulatedPlayer.simulateAttack(target);
+    }, interval);
   }
 };
 
@@ -128,7 +149,7 @@ let StopDestoringBlock = (SimulatedPlayer) => {
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
  * @param {number} Times 跳跃次数
  */
-let Jump = (SimulatedPlayer, Times) => {
+let Jump = (SimulatedPlayer, Times = 1) => {
   for (let i = 0; i < Times; i++) {
     return SimulatedPlayer.simulateJump();
   }
@@ -188,7 +209,45 @@ let isfakeplayer = (name) => {
     if (Player.isSimulatedPlayer() === true && Player.name === name) {
       return Player;
     } else if (Player.isSimulatedPlayer === false) {
-      return null;
+      return false;
     }
   }
 };
+
+/**
+ * 查询玩家执行的哪个命令并执行相应函数
+ * @param {any} result 指令回调结果
+ */
+function cmd(result) {
+  let FakePlayer = isfakeplayer(result.name);
+  let times = result["times"];
+  let pos = result["pos"];
+
+  if (FakePlayer) {
+    if (result["jumps"]) {
+      if (times) {
+        return Jump(FakePlayer, times);
+      } else {
+        return Jump(FakePlayer);
+      }
+    } else if (result["attacks"]) {
+      if (times && result["interval"]) {
+        return Attack(FakePlayer, result["target"], times, result["interval"]);
+      } else if (result["interval"]) {
+        return Attack(FakePlayer, result["target"], 1, result["interval"]);
+      } else {
+        return Attack(FakePlayer, result["target"], 1, 0);
+      }
+    } else if (result["lookats"]) {
+      return Lookat(FakePlayer, pos);
+    } else if (result["destorys"]) {
+      return Destory(FakePlayer, pos);
+    } else if (result["stopdestorys"]) {
+      return StopDestoringBlock(FakePlayer);
+    } else if (result["rot"]) {
+      return Bodyrot(FakePlayer, result["rotint"]);
+    }
+  } else {
+    return FakePlayer;
+  }
+}
