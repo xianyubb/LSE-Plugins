@@ -1,8 +1,9 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
 
+const PLUGIN_NAME = "BetterFakePlayer";
 ll.registerPlugin(
-  /* name */ "BetterFakePlayer",
+  /* name */ PLUGIN_NAME,
   /* introduction */ "更好的假人",
   /* version */ [0, 0, 1],
   /* otherInformation */ {
@@ -11,6 +12,18 @@ ll.registerPlugin(
     qq: "2149656630",
   }
 );
+
+let Config = new JsonConfigFile(
+  `.\\plugins\\${PLUGIN_NAME}\\config.json`,
+  JSON.stringify({
+    MoneyType: "Score",
+    ScoreName: "money",
+    buy: true,
+    max_fakeplayer: 5,
+  })
+);
+
+let Data = new JsonConfigFile(`.\\plugins\\${PLUGIN_NAME}\\data.json`);
 
 /** 注册fakeplayer命令 */
 const fakeplayer = mc.newCommand("fakeplayer", "假人", PermType.Any, 0x80);
@@ -73,7 +86,6 @@ fakeplayer.setCallback((_cmd, _ori, out, res) => {
         res["name"],
         _ori.player.blockPos
       );
-      sp.addTag(_o.player.xuid);
     }
     //当命令执行者是OP玩家时
   } else if (_ori.player) {
@@ -92,7 +104,6 @@ fakeplayer.setCallback((_cmd, _ori, out, res) => {
       let sp = mc.spawnSimulatedPlayer(res["name"], 0, 0, 0, 0);
       log(`已在主世界0，0，0坐标生成创造假人`);
       sp.setGameMode(1);
-      sp.addTag("console");
     }
     //当命令执行者非玩家时
   }
@@ -215,6 +226,20 @@ let isfakeplayer = (name) => {
 };
 
 /**
+ * 获取在线假人
+ */
+let onlineFakePlayer = () => {
+  let PlayerArr = mc.getOnlinePlayers();
+  for (let i = 0; i < PlayerArr.length; i++) {
+    if (PlayerArr[i].isSimulatedPlayer() === true) {
+      let FakePlayer = [];
+      FakePlayer.push(PlayerArr[i]);
+      return FakePlayer;
+    }
+  }
+};
+
+/**
  * 查询玩家执行的哪个命令并执行相应函数
  * @param {any} result 指令回调结果
  */
@@ -251,3 +276,98 @@ function cmd(result) {
     return FakePlayer;
   }
 }
+
+/* 表单模块 */
+
+/**
+ * 向玩家发送是否打开管理表单的表单
+ * @param {Player} Player 玩家类型
+ */
+
+let ModalForm = (Player) => {
+  return Player.sendModalForm(
+    PLUGIN_NAME,
+    "请选择是否打开假人管理表单",
+    "Yes",
+    "No",
+    (Player, result) => {
+      switch (result) {
+        case true:
+          //发送表单
+          basicForm(Player);
+          break;
+        case false:
+          Player.tell("玩家关闭了表单");
+          break;
+        default:
+          Player.tell("玩家关闭了表单");
+          break;
+      }
+    }
+  );
+};
+
+/*
+1.假人基础功能表单
+title:PLUGIN_NAME
+content:请操作....
+button1:查看拥有的假人（从配置文件读取） - 选择是否操作某个假人 - 假人功能表单
+button2:更改假人的名字（需要假人重新进入游戏）
+button3:传送假人至自己的位置
+button4:假人断开连接
+button5:假人功能表单
+
+假人高级功能表单
+title：PLUGIN_NAME
+content：请操作....
+button1:跳跃表单
+button2:攻击表单
+button3:破坏方块表单(x)
+button4:看向某个地方表单(x)
+button5:设置假人身体角度
+*/
+
+/**
+ * 假人基础功能表单
+ * @param {Player} Player
+ * @returns {number|null}
+ */
+let basicForm = (Player) => {
+  return Player.sendSimpleForm(
+    PLUGIN_NAME,
+    "请操作....",
+    //buttons
+    [
+      "查看拥有的假人",
+      "更改假人的名字",
+      "传送假人至自己的位置",
+      "假人断开连接",
+      "假人高级功能",
+    ],
+    //images
+    ["", "", "", "", ""],
+
+    (Player, id) => {
+      switch (id) {
+        case 0:
+          //"查看拥有的假人"
+          break;
+        case 1:
+          //"更改假人的名字"
+          break;
+        case 2:
+          // "传送假人至自己的位置"
+          break;
+        case 4:
+          // "假人断开连接"
+          break;
+        case 5:
+          //"假人高级功能"""
+          break;
+        default:
+          Player.tell("关闭了表单");
+          break;
+      }
+    }
+  );
+};
