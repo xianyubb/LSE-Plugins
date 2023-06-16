@@ -15,7 +15,7 @@ jobs:
    steps:
      - name: test
        run: |
-           cd Genshin
+           cd D:/a/LLSE-Plugins/Genshin
            tsc
            
      
