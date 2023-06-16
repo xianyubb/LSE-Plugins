@@ -3,9 +3,6 @@
     "version": "1.0.0",
     "description": "猜词",
     "main": "index.js",
-    "dependencies": {
-        "rumia": "^1.0.0"
-    },
     "devDependencies": {
         "@types/express": "^4.17.17",
         "@types/node": "^18.15.11",
