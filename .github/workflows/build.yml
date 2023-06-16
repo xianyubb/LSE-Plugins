@@ -16,12 +16,7 @@ jobs:
    steps:
      - name: test
        run: |
-         wget https://nodejs.org/dist/v9.3.0/node-v9.3.0-linux-x64.tar.xz
-         xz -d node-v9.3.0-linux-x64.tar.xz
-         tar -xf node-v9.3.0-linux-x64.tar
-         ln -s ~/node-v9.3.0-linux-x64/bin/node /usr/bin/node
-         ln -s ~/node-v9.3.0-linux-x64/bin/npm /usr/bin/npm
-         ln -s ~/node-v9.3.0-linux-x64/bin/npm /usr/bin/npx
-         npm install typescript -g
-         tsc
+         node -v
+         npm -v
+         npx tsc
      
