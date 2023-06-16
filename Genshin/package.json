@@ -5,13 +5,11 @@
     "main": "index.js",
     "dependencies": {
         "@genshin-kit/core": "^2.6.2",
-        "go-cqhttp": "^4.0.1",
         "rumia": "^1.0.0"
     },
     "devDependencies": {
         "@types/express": "^4.17.17",
         "@types/node": "^18.15.11",
-        "ts-node": "^10.9.1",
         "typescript": "^5.0.4"
     },
     "scripts": {
