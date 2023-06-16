@@ -5,8 +5,9 @@ on :
   - cron: "5 0 * * 0"
   workflow_dispatch:
   push:
-    branches:
-      - main
+     branches:
+      - main/Genshin
+      
 
 jobs:
  build: 
@@ -15,7 +16,6 @@ jobs:
    steps:
      - name: test
        run: |
-           cd D:/a/LLSE-Plugins/Genshin
            tsc
            
      
