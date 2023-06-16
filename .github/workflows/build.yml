@@ -18,5 +18,6 @@ jobs:
        run: |
          node -v
          npm -v
+         npm install typescript -g
          npx tsc
      
