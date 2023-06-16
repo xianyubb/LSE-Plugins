@@ -1,0 +1,3 @@
+run:
+cd Genshin;
+tsc
