@@ -1,0 +1,10 @@
+name: Build
+
+
+jobs:
+ 
+ 
+  -name: cd
+  run : 
+  cd Genshin
+  tsc
