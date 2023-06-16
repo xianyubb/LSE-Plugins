@@ -1,6 +1,0 @@
-name:build
-
-
-run:
-cd Genshin;
-tsc
