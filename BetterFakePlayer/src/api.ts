@@ -1,18 +1,3 @@
-// LiteLoader-AIDS automatic generated
-/// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
-
-const PLUGIN_NAME = "BetterFakePlayer";
-ll.registerPlugin(
-  /* name */ PLUGIN_NAME,
-  /* introduction */ "更好的假人",
-  /* version */ [0, 0, 1],
-  /* otherInformation */ {
-    author: "xianyubb",
-    other: "未经允许禁止私自分享修改后的插件",
-    qq: "2149656630",
-  }
-);
-
 let Config = new JsonConfigFile(
   `.\\plugins\\${PLUGIN_NAME}\\config.json`,
   JSON.stringify({
@@ -25,202 +10,125 @@ let Config = new JsonConfigFile(
 
 let Data = new JsonConfigFile(`.\\plugins\\${PLUGIN_NAME}\\data.json`);
 
-/** 注册fakeplayer命令 */
-const fakeplayer = mc.newCommand("fakeplayer", "假人", PermType.Any, 0x80);
-//命令别名
-fakeplayer.setAlias("fp");
-//main
-fakeplayer.mandatory("name", ParamType.String);
-fakeplayer.mandatory("pos", ParamType.BlockPos);
-fakeplayer.optional("times", ParamType.Int);
-fakeplayer.mandatory("target", ParamType.Actor);
-//注册生成假人命令
-fakeplayer.setEnum("ispawn", ["spawn", "dispawn"]);
-fakeplayer.mandatory("isspawn", ParamType.Enum, "ispawn", 1);
-fakeplayer.overload(["name", "isspawn"]);
-//注册假人跳跃命令
-fakeplayer.setEnum("jump", ["jump"]);
-fakeplayer.mandatory("jumps", ParamType.Enum, "jump", 1);
-fakeplayer.overload(["name", "jumps", "times"]);
-//注册假人攻击命令
-fakeplayer.setEnum("attack", ["attack"]);
-fakeplayer.setEnum("repeat", ["repeat"]);
-fakeplayer.mandatory("attacks", ParamType.Enum, "attack", 1);
-fakeplayer.optional("repeats", ParamType.Enum, "repeat");
-fakeplayer.optional("interval", ParamType.Int);
-fakeplayer.overload([
-  "name",
-  "attacks",
-  "target",
-  "repeats",
-  "interval",
-  "times",
-]);
-//注册假人看向某个位置命令
-fakeplayer.setEnum("lookat", ["lookat"]);
-fakeplayer.mandatory("lookats", ParamType.Enum, "lookat", 1);
-fakeplayer.overload(["name", "lookats", "pos"]);
-//注册假人破坏方块命令
-fakeplayer.setEnum("destory", ["destory"]);
-fakeplayer.mandatory("destorys", ParamType.Enum, "destory", 1);
-fakeplayer.overload(["name", "destorys", "pos"]);
-//注册假人停止破坏方块指令
-fakeplayer.setEnum("stopdestory", ["stopdestory"]);
-fakeplayer.mandatory("stopdestorys", ParamType.Enum, "stopdestory", 1);
-fakeplayer.overload(["name", "stopdestorys"]);
-//注册设置假人身体角度命令
-fakeplayer.setEnum("rot", ["rot"]);
-fakeplayer.mandatory("rots", ParamType.Enum, "rot", 1);
-fakeplayer.mandatory("rotint", ParamType.Int);
-fakeplayer.overload(["name", "rots", "rotint"]);
-//命令回调
-fakeplayer.setCallback((_cmd, _ori, out, res) => {
-  if (_ori.player && _ori.player.isOP()) {
-    if (cmd(res)) {
-      _ori.player.tell("假人正在执行中...");
-    } else {
-      _ori.player.tell(`未找到名为${res["name"]}的假人`);
-      _ori.player.tell(`正在为您生成名为${res["name"]}的假人`);
-      let sp = spawnSimilatedPlayer(
-        _ori.player,
-        res["name"],
-        _ori.player.blockPos
-      );
-    }
-    //当命令执行者是OP玩家时
-  } else if (_ori.player) {
-    if (cmd(res)) {
-      _ori.player.tell("假人正在执行中...");
-    } else {
-      _ori.player.tell(`未找到名为${res["name"]}的假人`);
-    }
-    //当命令执行者是普通玩家是
-  } else {
-    if (cmd(res)) {
-      log("假人正在执行中...");
-    } else {
-      log(`未找到名为${res["name"]}的假人`);
-      log(`正在为您生成名为${res["name"]}的假人`);
-      let sp = mc.spawnSimulatedPlayer(res["name"], 0, 0, 0, 0);
-      log(`已在主世界0，0，0坐标生成创造假人`);
-      sp.setGameMode(1);
-    }
-    //当命令执行者非玩家时
-  }
-});
-//安装命令
-fakeplayer.setup();
-
 /**
  * 为玩家生成一个假人
- * @param {Player} Player 玩家类型
- * @param {string} name 假人名
- * @param {IntPos} pos 整数坐标对象
+ * @param Player 玩家类型
+ * @param name 假人名
+ * @param pos 整数坐标对象
  */
-let spawnSimilatedPlayer = (Player: Player, name: string, pos: IntPos) => {
+function spawnSimilatedPlayer(Player: Player, name: string, pos: IntPos) {
   Player.tell(`[BetterFakePlayer]成功为玩家${Player.name}生成了一个假人`);
 
   return mc.spawnSimulatedPlayer(name, pos);
-};
-
+}
+/**
+ * 假人断开连接
+ * @param SimulatedPlayer
+ */
+function DisConnect(SimulatedPlayer: any): boolean {
+  return SimulatedPlayer.simulateDisconnect();
+}
 /**
  * 假人攻击
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
- * @param {Entity} target 攻击对象
- * @param {number} Times 攻击次数
- * @param {number} interval 攻击间隔
+ * @param target 攻击对象
+ * @param Times 攻击次数
+ * @param interval 攻击间隔
  */
-let Attack = (
-  SimulatedPlayer: SimulatedPlayer,
+function Attack(
+  SimulatedPlayer: any,
   target: Entity,
   Times: number = 1,
   interval: number = 200
-) => {
+): boolean | any {
+  let result;
   for (let i = 0; i < Times; i++) {
-    setInterval(async () => {
-      return SimulatedPlayer.simulateAttack(target);
+    setTimeout(() => {
+      result = SimulatedPlayer.simulateAttack(target);
     }, interval);
   }
-};
+  return result;
+}
 
 /**
  * 假人破坏方块
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
- * @param {IntPos} target 破坏对象
+ * @param target 破坏对象
  */
-let Destory = (SimulatedPlayer: SimulatedPlayer, target: IntPos) => {
+function Destory(SimulatedPlayer: any, target: IntPos): boolean {
   return SimulatedPlayer.simulateDestroy(target);
-};
+}
 
 /**
  * 假人停止破坏方块
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
  */
-let StopDestoringBlock = (SimulatedPlayer: SimulatedPlayer) => {
+function StopDestoringBlock(SimulatedPlayer: any): boolean {
   return SimulatedPlayer.simulateStopDestroyingBlock;
-};
+}
 
 /**
  * 假人跳跃
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
- * @param {number} Times 跳跃次数
+ * @para Times 跳跃次数
  */
-let Jump = (SimulatedPlayer: SimulatedPlayer, Times: number = 1) => {
+function Jump(SimulatedPlayer: any, Times: number = 1): boolean {
+  let result;
   for (let i = 0; i < Times; i++) {
-    return SimulatedPlayer.simulateJump();
+    result = SimulatedPlayer.simulateJump();
   }
-};
+  return result;
+}
 
 /**
  * 假人看向某方块或实体
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
- * @param {IntPos|Entity} target 要看向的实体
+ * @param target 要看向的实体
  */
-let Lookat = (SimulatedPlayer: SimulatedPlayer, target: IntPos | Entity) => {
+function Lookat(SimulatedPlayer: any, target: IntPos | Entity): boolean {
   return SimulatedPlayer.simulateLookAt(target);
-};
+}
 
 /**
  * 设置假人身体角度
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
- * @param {number} rot 角度
+ * @param rot 角度
  */
-let Bodyrot = (SimulatedPlayer: SimulatedPlayer, rot: number) => {
+function Bodyrot(SimulatedPlayer: any, rot: number): boolean {
   return SimulatedPlayer.simulateSetBodyRotation(rot);
-};
+}
 
 /**
  * 假人相对玩家坐标系移动
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
- * @param {IntPos} target 目标坐标
+ * @param target 目标坐标
  */
-let LocalMove = (SimulatedPlayer: SimulatedPlayer, target: IntPos) => {
+function LocalMove(SimulatedPlayer: any, target: IntPos): boolean {
   return SimulatedPlayer.simulateLocalMove(target);
-};
+}
 
 /**
  * 假人相对世界坐标系移动
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
- * @param {IntPos} target 目标坐标
+ * @param target 目标坐标
  */
-let WorldMove = (SimulatedPlayer: SimulatedPlayer, target: IntPos) => {
+function WorldMove(SimulatedPlayer: any, target: IntPos): boolean {
   return SimulatedPlayer.simulateWorldMove(target);
-};
+}
 
 /**
  * 假人停止移动
  * @param {SimulatedPlayer} SimulatedPlayer 假人类型
  */
-let StopMove = (SimulatedPlayer: SimulatedPlayer) => {
+function StopMove(SimulatedPlayer: any): boolean {
   return SimulatedPlayer.simulateStopMoving();
-};
+}
 
 /**
  * 检测提供的Name是否为一个假人
- * @param {string} name 假人名
- * @returns {false|Player|undefined}
+ * @param name 假人名
  */
-let isfakeplayer = (name: string): false | Player | undefined => {
+function isfakeplayer(name: string): false | any | undefined {
   for (let i = 0; i < mc.getOnlinePlayers().length; i++) {
     const Player = mc.getOnlinePlayers()[i];
     if (Player.isSimulatedPlayer() === true && Player.name === name) {
@@ -229,12 +137,12 @@ let isfakeplayer = (name: string): false | Player | undefined => {
       return false;
     }
   }
-};
+}
 
 /**
  * 获取在线假人
  */
-let onlineFakePlayer = () => {
+function onlineFakePlayer() {
   let PlayerArr = mc.getOnlinePlayers();
   for (let i = 0; i < PlayerArr.length; i++) {
     if (PlayerArr[i].isSimulatedPlayer() === true) {
@@ -243,11 +151,11 @@ let onlineFakePlayer = () => {
       return FakePlayer;
     }
   }
-};
+}
 
 /**
  * 查询玩家执行的哪个命令并执行相应函数
- * @param {any} result 指令回调结果
+ * @param result 指令回调结果
  */
 function cmd(result: any) {
   let FakePlayer = isfakeplayer(result.name);
@@ -277,6 +185,8 @@ function cmd(result: any) {
       return StopDestoringBlock(FakePlayer);
     } else if (result["rot"]) {
       return Bodyrot(FakePlayer, result["rotint"]);
+    } else if (result["disconnects"]) {
+      return DisConnect(FakePlayer);
     }
   } else {
     return FakePlayer;
@@ -287,10 +197,10 @@ function cmd(result: any) {
 
 /**
  * 向玩家发送是否打开管理表单的表单
- * @param {Player} Player 玩家类型
+ * @param Player 玩家类型
  */
 
-let ModalForm = (Player: Player) => {
+function ModalForm(Player: Player) {
   return Player.sendModalForm(
     PLUGIN_NAME,
     "请选择是否打开假人管理表单",
@@ -311,7 +221,7 @@ let ModalForm = (Player: Player) => {
       }
     }
   );
-};
+}
 
 /*
 1.假人基础功能表单
@@ -335,10 +245,9 @@ button5:设置假人身体角度
 
 /**
  * 假人基础功能表单
- * @param {Player} Player
- * @returns {number|null}
+ * @param Player
  */
-let basicForm = (Player: Player): number | null => {
+function basicForm(Player: Player): number | null {
   return Player.sendSimpleForm(
     PLUGIN_NAME,
     "请操作....",
@@ -376,7 +285,25 @@ let basicForm = (Player: Player): number | null => {
       }
     }
   );
+}
+
+export {
+  spawnSimilatedPlayer,
+  Jump,
+  Bodyrot,
+  Attack,
+  StopDestoringBlock,
+  StopMove,
+  LocalMove,
+  WorldMove,
+  Lookat,
+  ModalForm,
+  basicForm,
+  onlineFakePlayer,
+  isfakeplayer,
+  cmd,
+  Destory,
+  Data,
+  Config,
+  DisConnect,
 };
-
-
-
