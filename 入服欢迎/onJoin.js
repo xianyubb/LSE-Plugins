@@ -1,27 +1,48 @@
 //LiteLoaderScript Dev Helper
 /// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
 
+const PLUGIN_NAME = "onJoin";
 ll.registerPlugin(
-  /* name */ "onJoin",
+  /* name */ PLUGIN_NAME,
   /* introduction */ "一个小小的入服欢迎提示",
-  /* version */ [0, 0, 1],
-  /* otherInformation */ {}
+  /* version */ [0, 1, 0],
+  /* otherInformation */ {
+    author: "xianyubb",
+  }
 );
 
-// 加载成功提示
-log("onJoin加载成功");
+class Send {
+  /**
+   *
+   * @param {Player} Player
+   */
+  constructor(Player) {
+    this.Player = Player;
+    this.msg = `[§4系统提示§r]§4§l欢迎玩家§e[${this.Player.name}]§4进入服务器`;
+  }
+  only() {
+    return this.Player.tell(this.msg);
+  }
+  quan() {
+    return mc.broadcast(this.msg, 3);
+  }
+  title() {
+    return this.Player.setTitle(this.msg, 3);
+  }
+  Toast() {
+    return this.Player.sendToast("§6§l入服欢迎", this.msg);
+  }
+  console() {
+    return logger.log(this.msg);
+  }
+}
 
-// 入服欢迎聊天形式
-mc.listen("onJoin", (pl) => {
-  mc.broadcast("[§4系统提示§r]§4§l欢迎玩家§e[" + pl.name + "]§4进入服务器");
-});
-
-//入服欢迎标题形式
-mc.listen("onJoin", (pl) => {
-  pl.sendToast("§6§l入服欢迎", "§4§l欢迎玩家§e[" + pl.name + "]§4进入服务器");
-});
-
-// 入服欢迎title命令形式
-mc.listen("onJoin", (pl) => {
-  mc.runcmd(`title @a title §4欢迎玩家\n§e${pl.name}§3\n进入服务器`);
+mc.listen("onJoin", (Player) => {
+  let send = new Send(Player);
+  send.only();
+  send.quan();
+  send.title();
+  send.Toast();
+  send.console();
+  return false;
 });
