@@ -1,5 +1,5 @@
 // LiteLoader-AIDS automatic generated
-/// <reference path="c:\Users\01\Desktop\llselib/dts/HelperLib-master/src/index.d.ts"/>
+/// <reference path="c:\Users\Administrator\.vscode/dts/helperlib/src/index.d.ts"/>
 
 const PLUGIN_NAME = "HunterGame";
 ll.registerPlugin(
@@ -95,7 +95,10 @@ function PlayerForm1(Player) {
     if (id != null) {
       switch (id) {
         case 0:
-          if (GetHouse().length < conf.get("ServerMaxHouse")) {
+          if (
+            Object.keys(JSON.parse(Gamedata.read())).length <
+            conf.get("ServerMaxHouse")
+          ) {
             CreateHouse(pl);
           } else {
             pl.tell(XT("House_full"));
@@ -172,11 +175,7 @@ class House {
    * 查看房间玩家
    */
   get lookplayer() {
-    this.PlayerNameArr = [];
-    this.house.gameplayer.forEach((pl) => {
-      this.PlayerNameArr.push(pl.name);
-    });
-    return this.PlayerNameArr.join(",");
+    return this.gameplayer.join(",");
   }
   /**
    * 设置房间状态
@@ -237,7 +236,7 @@ function ManageHouse2(player, house_id) {
   mf.addButton(XT("Min_player"));
   mf.addButton(XT("Max_player"));
   mf.addButton(XT("Single_game_time"));
-  mf.addButton(XT("House_massge"));
+  mf.addButton(XT("House_massage"));
   player.sendForm(mf, (pl, id) => {
     switch (id) {
       case 0:
@@ -245,7 +244,7 @@ function ManageHouse2(player, house_id) {
         pl.sendForm(cf, (Player, data) => {
           if (data) {
             HouseData(house_id, house.setname(data[0]));
-            Player.tell(CT("Set_compete_massage"));
+            Player.tell(XT("Set_compete_massage"));
             ManageHouse2(Player, house_id);
           } else {
             Player.tell(XT("Form_stoped"));
@@ -309,7 +308,7 @@ function ManageHouse2(player, house_id) {
  * @param {} housedata 修改后的数据
  */
 function HouseData(house_id, housedata) {
-  Gamedata.set(house_id, housedata);
+  Gamedata.set(String(house_id), housedata);
 }
 
 /**
@@ -327,8 +326,9 @@ function CreateHouse(Player) {
     gamestatus: false,
   };
   for (let i = 0; i < conf.get("ServerMaxHouse"); i++) {
-    if (conf.get(String(i)) == null) {
-      conf.init(Number(i), newhouse);
+    if (Gamedata.get(String(i)) == null) {
+      Gamedata.set(String(i), newhouse);
+      break;
     }
   }
 }
