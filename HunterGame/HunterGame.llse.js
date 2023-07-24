@@ -1,5 +1,5 @@
 // LiteLoader-AIDS automatic generated
-/// <reference path="c:\Users\Administrator\.vscode/dts/helperlib/src/index.d.ts"/>
+/// <reference path="../HelperLib/src/index.d.ts"/>
 
 const PLUGIN_NAME = "HunterGame";
 ll.registerPlugin(
