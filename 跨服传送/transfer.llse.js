@@ -1,8 +1,8 @@
 //LiteLoaderScript Dev Helper
-/// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
+/// <reference path="../HelperLib/src/index.d.ts"/>
 
 const PLUGIN_NAME = "Transfer";
-const PLUGIN_VERSION = [0, 1, 0];
+const PLUGIN_VERSION = [0, 1, 1];
 
 const PLUGIN_DATA_PATH = `plugins/${PLUGIN_NAME}`;
 const PLUGIN_CONFIG_PATH = `${PLUGIN_DATA_PATH}/config.json`;
