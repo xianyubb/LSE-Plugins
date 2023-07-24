@@ -53,13 +53,13 @@ conf.init("ServerMaxHouse", 3); // 服务器最多游戏房间
 
 let Gamedata = new JsonConfigFile(
   `.\\plugins\\${PLUGIN_NAME}\\Gamedata.json`,
-  "[]"
+  "{}"
 );
 
 /*
 // 拟定房间数据
-[
-    {
+｛
+   0: {
         creator:string,
         name:string,
         minplayer:number,
@@ -68,7 +68,7 @@ let Gamedata = new JsonConfigFile(
         gameplayer:string[],
         gamestutas:boolean
     }
-]
+｝
 */
 
 /**
@@ -113,12 +113,11 @@ function PlayerForm1(Player) {
 
 /**
  * 读取房间
- * @returns {any[]} 房间数组
+ * @param {number} id 房间id
+ * @returns {} 房间对象
  */
-function GetHouse() {
-  let housedata = Gamedata.read();
-  let elements = housedata.slice(1, -1).slice(1, -1).split(",");
-  return elements.map((elements) => JSON.parse(elements));
+function GetHouse(id) {
+  return Gamedata.get(String(id));
 }
 
 class House {
@@ -130,7 +129,7 @@ class House {
    * minplayer:number,
    * maxplayer:number,
    * gametime:number,
-   * gameplayer:Player[],
+   * gameplayer:string[],
    * gamestatus:boolean
    * }} house 房间对象
    */
@@ -198,21 +197,27 @@ function ManageHouse1(player) {
   mf.setTitle(XT("Plugin_name"));
   mf.setContent(XT("Form_content1"));
   let index;
+  let gamedata = Gamedata.read();
   if (player.isOP()) {
-    for (index = 0; index < GetHouse().length; index++) {
-      const element = GetHouse()[index];
-      mf.addButton(element.name);
+    for (const key in JSON.parse(gamedata)) {
+      if (Object.hasOwnProperty.call(JSON.parse(gamedata), key)) {
+        const element = JSON.parse(gamedata)[key];
+        mf.addButton(element.name);
+      }
     }
   } else {
-    for (index = 0; index < GetHouse().length; index++) {
-      const element = GetHouse()[index];
-      if (element.creator === player.name) {
-        mf.addButton(element.name);
+    for (const key in JSON.parse(gamedata)) {
+      if (Object.hasOwnProperty.call(JSON.parse(gamedata), key)) {
+        const element = JSON.parse(gamedata)[key];
+        if (element.creator === player.name) {
+          mf.addButton(element.name);
+        }
       }
     }
   }
   player.sendForm(mf, (pl, id) => {
     if (id != null) {
+      ManageHouse2(pl, id);
     }
   });
 }
@@ -222,12 +227,12 @@ function ManageHouse1(player) {
  * @param {number} house_id 房间id
  */
 function ManageHouse2(player, house_id) {
-  let house = new House(GetHouse()[house_id]);
+  let house = new House(GetHouse(house_id));
   let cf = mc.newCustomForm();
   cf.setTitle(XT("Plugin_name"));
   let mf = mc.newSimpleForm();
-  mf.setTitle("Plugin_name");
-  mf.setContent("Form_content1");
+  mf.setTitle(XT("Plugin_name"));
+  mf.setContent(XT("Form_content1"));
   mf.addButton(XT("House_name"));
   mf.addButton(XT("Min_player"));
   mf.addButton(XT("Max_player"));
@@ -240,7 +245,7 @@ function ManageHouse2(player, house_id) {
         pl.sendForm(cf, (Player, data) => {
           if (data) {
             HouseData(house_id, house.setname(data[0]));
-            Player.tell("Set_compete_massge");
+            Player.tell(CT("Set_compete_massage"));
             ManageHouse2(Player, house_id);
           } else {
             Player.tell(XT("Form_stoped"));
@@ -252,7 +257,7 @@ function ManageHouse2(player, house_id) {
         player.sendForm(cf, (Player, data) => {
           if (data) {
             HouseData(house_id, house.setminplayer(Number(data[0])));
-            Player.tell("Set_compete_massge");
+            Player.tell(XT("Set_compete_massage"));
             ManageHouse2(Player, house_id);
           } else {
             Player.tell(XT("Form_stoped"));
@@ -264,7 +269,7 @@ function ManageHouse2(player, house_id) {
         player.sendForm(cf, (Player, data) => {
           if (data) {
             HouseData(house_id, house.setmaxplayer(Number(data[0])));
-            Player.tell("Set_compete_massge");
+            Player.tell(XT("Set_compete_massage"));
           } else {
             Player.tell(XT("Form_stoped"));
           }
@@ -275,7 +280,7 @@ function ManageHouse2(player, house_id) {
         player.sendForm(cf, (Player, data) => {
           if (data) {
             HouseData(house_id, house.setGametime(Number(data[0])));
-            Player.tell("Set_compete_massge");
+            Player.tell(XT("Set_compete_massage"));
             ManageHouse2(Player, house_id);
           } else {
             Player.tell(XT("Form_stoped"));
@@ -301,13 +306,10 @@ function ManageHouse2(player, house_id) {
 /**
  * 修改housedata(采用了最笨的方法...，以后会尝试优化)
  * @param {number} house_id 删除的数据位置
- * @param {} housedata 修改的数据
+ * @param {} housedata 修改后的数据
  */
 function HouseData(house_id, housedata) {
-  let olddata = GetHouse();
-  let newdata = olddata.splice(house_id, house_id);
-  newdata.push(housedata);
-  Gamedata.write(JSON.stringify(newdata));
+  Gamedata.set(house_id, housedata);
 }
 
 /**
@@ -315,18 +317,20 @@ function HouseData(house_id, housedata) {
  * @param {Player} Player 玩家
  */
 function CreateHouse(Player) {
-  let NewHouse = {
+  let newhouse = {
     creator: Player.name,
     name: "house_name",
     minplayer: 1,
     maxplayer: 4,
     gametime: 30,
-    gameplayer: [].push(Player),
+    gameplayer: [Player.name],
     gamestatus: false,
   };
-  let olddata = GetHouse();
-  olddata.push(NewHouse);
-  Gamedata.write(olddata);
+  for (let i = 0; i < conf.get("ServerMaxHouse"); i++) {
+    if (conf.get(String(i)) == null) {
+      conf.init(Number(i), newhouse);
+    }
+  }
 }
 
 let hg = mc.newCommand("huntergame", XT("Plugin_name"), PermType.Any);
@@ -337,4 +341,4 @@ hg.overload(["op"]);
 hg.setCallback((_cmd, _ori, out, res) => {
   PlayerForm1(_ori.player);
 });
-hg.setup()
+hg.setup();
