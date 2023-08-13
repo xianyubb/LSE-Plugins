@@ -1,5 +1,5 @@
 // LiteLoader-AIDS automatic generated
-/// <reference path="c:\Users\Administrator\.vscode/dts/HelperLib-master/src/index.d.ts"/>
+/// <reference path="../HelperLib/src/index.d.ts"/>
 
 ll.registerPlugin(
   /* name */ "Giveop",
