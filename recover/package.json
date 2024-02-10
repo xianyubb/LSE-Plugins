@@ -1,0 +1,15 @@
+{
+  "name": "changemaxhealth",
+  "version": "0.3.0",
+  "description": "ChangeMaxHealth",
+  "main": "recover.js",
+  "author": {
+    "name": "xianyubb"
+  },
+  "scripts": {
+    "build": "tsc && .\\scripts\\copy-package-json.cmd",
+    "clean": "rmdir /s /q dist && del xianyubb-bot.zip",
+    "package": ".\\scripts\\package.cmd",
+    "watch": "tsc --watch"
+  }
+}

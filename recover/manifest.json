@@ -1,0 +1,10 @@
+{
+  "name": "recover",
+  "entry": "recover.js",
+  "type": "lse-quickjs",
+  "dependencies": [
+    {
+      "name": "legacy-script-engine-quickjs"
+    }
+  ]
+}
