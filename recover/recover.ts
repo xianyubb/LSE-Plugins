@@ -1,4 +1,4 @@
-/// <reference path="D:/Code/Helperlib/src/index.d.ts" />
+/// <reference path="E:/Code/Helperlib/src/index.d.ts" />
 
 
 

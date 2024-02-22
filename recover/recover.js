@@ -1,13 +1,16 @@
-/// <reference path="D:/Code/Helperlib/src/index.d.ts" />
+/// <reference path="E:/Code/Helperlib/src/index.d.ts" />
+
 const PLUGIN_NAME = "recover";
 ll.registerPlugin(PLUGIN_NAME, "回溯", [0, 1, 0], {
     author: "xianyubb",
     QQ: "2149656630"
 });
+
 /** 配置文件 */
 const Conf = new JsonConfigFile(`./plugins/${PLUGIN_NAME}/config.json`);
 /** 数据文件 */
 const DataFile = new JsonConfigFile(`./plugins/${PLUGIN_NAME}/data.json`);
+;
 /** 传送时间间隔(单位: s) */
 const Cd = Conf.init("cd", 120);
 /** 城市 */

@@ -1,0 +1,10 @@
+{
+    "entry": "Transfer.js",
+    "name": "Transfer",
+    "type": "lse-quickjs",
+    "dependencies": [
+        {
+            "name": "legacy-script-engine-quickjs"
+        }
+    ]
+}
